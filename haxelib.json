@@ -1,0 +1,15 @@
+{
+    "name": "moon-peg",
+    "license": "MIT",
+    "tags": ["cross", "utility", "parser"],
+    "description": "PEG packrat parser with direct and indirect left recursion support",
+    "contributors": ["profound7"],
+    "releasenote": "First release",
+    "version": "0.1.0",
+    "url": "https://github.com/profound7/moon-peg",
+    "classPath": "src",
+    "dependencies": 
+    {
+        "moon-core": ""
+    }
+}

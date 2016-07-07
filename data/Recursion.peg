@@ -1,0 +1,8 @@
+$a = "x" / "y";
+
+// direct recursion
+s = s a / a;
+
+// indirect recursion
+r = t;
+t = r a / a;

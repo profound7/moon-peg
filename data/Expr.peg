@@ -1,0 +1,26 @@
+S = Expr0;
+
+Digit = [0-9]+;
+Alpha = [A-Za-z]+;
+AlphaNum = [A-Za-z0-9]+;
+_ = [ \t\n\r]*;
+
+Ident = (Alpha AlphaNum*):"";
+
+$Expr0
+    = (Expr1 @"=" Expr0):Set
+    / Expr1;
+
+$Expr1
+    = (Expr1 @"+" Expr2):Add
+    / (Expr1 @"-" Expr2):Sub
+    / Expr2;
+    
+$Expr2
+    = (Expr2 @"*" Expr3):Mul
+    / (Expr2 @"/" Expr3):Div
+    / Expr3;
+    
+$Expr3
+    = "(" Expr0 ")"
+    / Ident;

@@ -1,0 +1,72 @@
+
+/**
+ * Lisp dialect for Cogs VM
+ * @author Munir Hussin
+ */
+
+// entry point
+$start = expr*
+
+
+// skippables
+$_ = @[ \t\n\r]*
+$__ = @(comment / _)*
+
+
+// lexer
+hex = ~/0x[0-9A-F]+/i
+float = ~/([-+]?((\d*\.\d+)([eE][-+]?\d+)?|(\d+)([eE][-+]?\d+)))/
+int = ~/(-?[0-9]+)/
+true = "true"
+false = "false"
+null = "null"
+symbol = ~/((?!\/\/|\/\*)[^\s\n\r\t\(\)\[\]{}'`,@.:])+/;
+
+// string with escape characters modified from
+// http://stackoverflow.com/a/6525975/3761791
+string = (@'"' ~/^([^"\\]*(?:\\.[^"\\]*)*)"/:1 @'"'):1
+
+list = @"(" expr* @")"
+
+// { a:2 b:3 }
+$objdef = (__ (string / symbol:quote) __ @":" __ expr __):cons
+object = @"{" objdef* @"}"
+
+array = @"[" expr* @"]"
+
+$comment
+    = block_comment
+    / inline_comment
+    
+$block_comment = ~/(\/\*([\d\D]*?)\*\/)/
+$inline_comment = ~/(\/\/.*)$/m
+
+$primary
+    = (@"'" expr):1:quote
+    / (@"`" expr):1:backquote
+    / (@",@" expr):1:expand
+    / (@"," expr):1:unquote
+    / true
+    / false
+    / null
+    / int
+    / float
+    / string
+    / list
+    / array
+    / object
+    / symbol
+
+
+
+$expr
+    = (expr1 @":" expr):cons    // right associative
+    / expr1
+    
+$expr1
+    = &float float
+    / (expr1 @"." expr2):field  // left associative
+    / expr2
+    
+$expr2
+    = (__ primary __):1
