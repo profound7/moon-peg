@@ -50,6 +50,8 @@ r = t;
 t = r a / a;
 ```
 
+For another example, see [LispTest.hx](test/moon/peg/LispTest.hx), [LispParser.hx](src/moon/peg/lang/LispParser.hx), and its corresponding grammar file [Lisp.peg](data/Lisp.peg).
+
 #### Grammar Rules
 
 ##### The ParseTree Enum
@@ -126,6 +128,7 @@ Transformations can be nested. The result of one transformation, can be further 
 
 - Line/character position info.
 - Refactor the macro that generates the parser at compile-time (ugly code done long ago).
+- Unit tests
 - Optimize
 
 ## Contributing
