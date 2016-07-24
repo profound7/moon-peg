@@ -647,15 +647,28 @@ class Stream
             i = pos;
             return error(i, 'Expected $ea or $eb');
         }
-        else if (posA >= posB)
-        {
-            i = posA;
-            return ta;
-        }
         else
         {
-            i = posB;
-            return tb;
+            if (ta == Error)
+            {
+                i = posB;
+                return tb;
+            }
+            else if (tb == Error)
+            {
+                i = posA;
+                return ta;
+            }
+            else if (posA >= posB)
+            {
+                i = posA;
+                return ta;
+            }
+            else
+            {
+                i = posB;
+                return tb;
+            }
         }
     }
     
