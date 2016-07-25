@@ -784,7 +784,7 @@ class Stream
     public inline function matchNotAhead(r:Rule):ParseTree
     {
         var tr = matchPeek(r);
-        return tr == Error ? Empty : tr;
+        return tr == Error ? Empty : Error;
     }
     
     /**
