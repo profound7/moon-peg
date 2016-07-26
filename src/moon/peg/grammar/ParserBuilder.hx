@@ -1,8 +1,8 @@
 package moon.peg.grammar;
 
-import moon.peg.grammar.Rule;
 import moon.core.Compare;
 import moon.core.Symbol;
+import moon.peg.grammar.Rule;
 
 #if macro
     // TODO: REFACTOR and get rid of this Generic class
@@ -18,6 +18,7 @@ import moon.core.Symbol;
 #end
 
 using StringTools;
+using moon.peg.grammar.RuleTools;
 
 /**
  * ParserBuilder generates a Parser class based on PEG input.
@@ -194,6 +195,7 @@ class ParserBuilder
             'import moon.peg.grammar.Rule;',
             'import moon.peg.grammar.Stream;',
             'import moon.peg.grammar.ParseTree;',
+            'using moon.peg.grammar.RuleTools;',
             '',
             '/**',
             ' * $className',

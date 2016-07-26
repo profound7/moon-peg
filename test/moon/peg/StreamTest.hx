@@ -5,7 +5,7 @@ import moon.peg.grammar.Parser;
 import moon.test.TestCase;
 import moon.test.TestRunner;
 
-using moon.peg.grammar.ParseTree;
+using moon.peg.grammar.ParseTreeTools;
 
 /**
  * ...

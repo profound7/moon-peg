@@ -10,7 +10,7 @@ import moon.peg.parser.Operators;
 import moon.peg.parser.Token;
 import moon.peg.parser.TokenStream;
 
-using moon.peg.grammar.Rule.RuleTools;
+using moon.peg.grammar.RuleTools;
 
 /**
  * Custom written recursive descent parser to parse
@@ -178,35 +178,35 @@ class PegParser
     
     public function validateRules(rules:Map<String, Rule>):Void
     {
-        var lhs = new Map<String, Int>();
         var rhs = new Map<String, Int>();
         
-        for (id in rules.keys())
+        // collect all the IDs found in a rule
+        function collectIds(rule:Rule):Void
         {
-            lhs[id] = 1;
-            var rule = rules[id];
-            
-            rule.map(function(rule:Rule):Rule
+            switch (rule)
             {
-                switch (rule)
-                {
-                    // collect all lhs and rhs ids
-                    case Id(x):
-                        rhs[x] = 1;
-                        
-                    case _:
-                }
-                
-                return rule;
-            });
+                case Id(x):
+                    rhs[x] = 1;
+                    
+                case Transform(a, b):
+                    collectIds(a);
+                    
+                case _:
+                    rule.iter(collectIds);
+            }
         }
         
-        // filter unmatched ids
-        for (id in lhs.keys())
-            if (rhs.exists(id))
-                rhs.remove(id);
+        // first pass, we get all IDs on RHS of the rules
+        for (id in rules.keys())
+            collectIds(rules[id]);
+        
+        // second pass, we filter unmatched ids
+        for (id in rules.keys())
+            rhs.remove(id);
         
         var undefined:Array<String> = [for (id in rhs.keys()) id];
+        
+        //trace(undefined);
         
         // rules used on rhs, but wasnt defined on lhs
         if (undefined.length > 0)

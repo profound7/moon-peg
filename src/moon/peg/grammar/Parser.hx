@@ -3,6 +3,8 @@ package moon.peg.grammar;
 import moon.peg.grammar.Stream;
 import moon.peg.grammar.Rule;
 
+using moon.peg.grammar.RuleTools;
+
 /**
  * PEG packrat parser with direct and indirect left recursion support.
  * There's 2 ways of using this class.
@@ -39,26 +41,40 @@ class Parser<Const>
     
     public function initCache():Void
     {
+        var lookup = new Map<String, Int>();
+        
         // should we cache ids as well?
         rxCache = [];
         
+        // convert all Rx(r, opt) rules into Rxc(i) rules
+        function cacheRegularExpressions(rule:Rule):Rule
+        {
+            return switch (rule)
+            {
+                case Rx(r, opt):
+                    var key = '$r/$opt';
+                    
+                    if (lookup.exists(key))
+                    {
+                        Rxc(lookup.get(key));
+                    }
+                    else
+                    {
+                        var index = rxCache.length;
+                        lookup.set(key, index);
+                        
+                        rxCache.push(new EReg("^" + r, opt));
+                        Rxc(index);
+                    }
+                    
+                case _:
+                    RuleTools.map(rule, cacheRegularExpressions);
+            }
+        }
+        
         for (id in rules.keys())
         {
-            var rule:Rule = rules[id];
-            
-            rules[id] = Rule.RuleTools.map(rule, function(rule:Rule):Rule
-            {
-                return switch (rule)
-                {
-                    // cache the regular expressions
-                    case Rx(r, opt):
-                        rxCache.push(new EReg("^" + r, opt));
-                        Rxc(rxCache.length - 1);
-                        
-                    case _:
-                        rule;
-                }
-            });
+            rules[id] = cacheRegularExpressions(rules[id]);
         }
         
         /*for (id in rules.keys())
