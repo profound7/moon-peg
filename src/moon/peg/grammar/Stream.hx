@@ -703,6 +703,7 @@ class Stream
             //results.push(tr);
         }
         
+        // should this be [] instead of Empty?
         if (results.length == 0)
             return Empty;
         else
@@ -774,7 +775,7 @@ class Stream
     public inline function matchAhead(r:Rule):ParseTree
     {
         var tr = matchPeek(r);
-        return tr == Error ? tr : Empty;
+        return tr == Error ? Error : Empty;
     }
     
     /**
@@ -791,11 +792,12 @@ class Stream
      * @A
      * Hide. Matches the rule and consumes, but will
      * return an Empty result instead if successful.
+     * Can be used for non-capturing expressions.
      */
     public inline function matchHide(r:Rule):ParseTree
     {
         var tr = matchRule(r);
-        return tr == Error ? tr : Empty;
+        return tr == Error ? Error : Empty;
     }
     
     /**
