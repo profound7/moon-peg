@@ -225,6 +225,9 @@ class Generic
                 
             case TOptional(t):
                 TOptional(replaceParam(t, params));
+                
+            default:
+                throw 'ReplaceParam not supported for $ctype';
         }
     }
     

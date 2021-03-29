@@ -1,7 +1,5 @@
 package moon.peg.grammar;
 
-import moon.core.Compare;
-import moon.core.Symbol;
 import moon.peg.grammar.Rule;
 
 #if macro
@@ -332,6 +330,9 @@ class ParserBuilder
                 
             case _:
                 throw "ParserBuilder: Unexpected rule: " + rule;
+                // compiler complains when string not present
+                ' ';
+
         }
     }
     
