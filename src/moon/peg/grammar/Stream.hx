@@ -1,13 +1,11 @@
 package moon.peg.grammar;
 
-import moon.core.Console;
-import moon.core.Symbol;
 import moon.core.Text;
 import moon.peg.grammar.Rule;
 import moon.peg.grammar.ParseTree;
 
 using StringTools;
-using moon.tools.ArrayTools;
+
 
 /**
  * PEG parser with memoization (Packrat parser)
